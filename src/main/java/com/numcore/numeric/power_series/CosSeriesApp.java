@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class CosSeriesApp {
     public static void main(String[] args) {
-        PowerSeriesCalculator calculator = new PowerSeriesCalculator(new CosSeriesTerm());
+        CosFunctionalSeries series = new CosFunctionalSeries();
         Scanner scanner = new Scanner(System.in);
 
         System.out.print("Enter a: ");
@@ -26,8 +26,8 @@ public class CosSeriesApp {
         for (int i = 0; i < k; i++) {
             double x = a + i * h;
             double exact = Math.cos(x);
-            double byTerms = calculator.computeByTerms(x, n);
-            double byEpsilon = calculator.computeByEpsilon(x, 0.0001);
+            double byTerms = series.computeByTerms(x, n);
+            double byEpsilon = series.compute(x, 0.0001);
 
             System.out.printf("%-10.4f %-15.10f %-15.10f %-15.10f %-15.6f%n",
                     x, exact, byTerms, byEpsilon, Math.abs(exact - byEpsilon));
