@@ -1,6 +1,6 @@
 package com.numcore.numeric.approxcomputations;
 
-public class MeasurementComparator {
+public class MeasurementComparator implements ApproximateComputation {
     private final double lengthInMeters;
 
     public MeasurementComparator(double lengthInMeters) {
@@ -12,6 +12,7 @@ public class MeasurementComparator {
         return new MeasurementComparator(relativeError);
     }
 
+    @Override
     public double getValue() {
         return lengthInMeters;
     }

@@ -1,6 +1,6 @@
 package com.numcore.numeric.approxcomputations;
 
-public class ErrorDerivation {
+public class ErrorDerivation implements ApproximateComputation {
     private final double value;
 
     public ErrorDerivation(double value) {
@@ -12,6 +12,7 @@ public class ErrorDerivation {
         return new ErrorDerivation(relativeDelta);
     }
 
+    @Override
     public double getValue() {
         return value;
     }

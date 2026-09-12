@@ -1,6 +1,6 @@
 package com.numcore.numeric.approxcomputations;
 
-public class RoundingEvaluator {
+public class RoundingEvaluator implements ApproximateComputation {
     private final double value;
 
     public RoundingEvaluator(double value) {
@@ -23,6 +23,7 @@ public class RoundingEvaluator {
         return new RoundingEvaluator(relativePercent);
     }
 
+    @Override
     public double getValue() {
         return value;
     }

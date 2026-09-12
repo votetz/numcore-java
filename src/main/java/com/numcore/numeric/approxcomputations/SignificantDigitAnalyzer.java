@@ -1,6 +1,6 @@
 package com.numcore.numeric.approxcomputations;
 
-public class SignificantDigitAnalyzer {
+public class SignificantDigitAnalyzer implements ApproximateComputation {
     private final double value;
 
     public SignificantDigitAnalyzer(double value) {
@@ -18,6 +18,7 @@ public class SignificantDigitAnalyzer {
         return Math.max(0, n);
     }
 
+    @Override
     public double getValue() {
         return value;
     }
