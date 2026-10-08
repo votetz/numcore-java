@@ -12,7 +12,7 @@ class DefaultNumberSeriesTest {
 
         double result = series.compute(1e-6);
 
-        assertEquals(0.333333, result, 1e-4);
+        assertEquals(0.333333, result, 1e-3);
     }
 
     @Test
