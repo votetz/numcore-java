@@ -91,7 +91,7 @@ class ListVectorOperationTest {
                 Arguments.of(
                         new double[]{22.5575, 39.3926},
                         new double[]{-30.2615, 29.7423},
-                        new double[]{-7.704, 68.1349}
+                        new double[]{-7.704, 69.1349}
                 )
         );
     }
@@ -121,7 +121,7 @@ class ListVectorOperationTest {
                 Arguments.of(
                         new double[]{22.5575, 39.3926},
                         new double[]{-30.2615, 29.7423},
-                        498.17771949
+                        489.00274073
                 )
         );
     }
