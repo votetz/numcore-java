@@ -2,6 +2,7 @@ package com.numcore.numeric.linearalgebra.tridiagonal;
 
 import com.numcore.numeric.linearalgebra.tridiagonal.impl.ThomasAlgorithmSolver;
 import com.numcore.numeric.linearalgebra.vector.Vector;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -9,6 +10,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ThomasAlgorithmSolverTest {
     @ParameterizedTest
@@ -20,6 +22,31 @@ class ThomasAlgorithmSolverTest {
         for (int index = 0; index < expectedSolution.length; index++) {
             assertEquals(expectedSolution[index], solution.get(index), 1e-8);
         }
+
+        double[] lower = system.lowerDiagonal();
+        double[] main = system.mainDiagonal();
+        double[] upper = system.upperDiagonal();
+        double[] rightHandSide = system.rightHandSide();
+        for (int row = 0; row < solution.size(); row++) {
+            double leftHandSide = main[row] * solution.get(row);
+            if (row > 0) {
+                leftHandSide += lower[row] * solution.get(row - 1);
+            }
+            if (row < solution.size() - 1) {
+                leftHandSide += upper[row] * solution.get(row + 1);
+            }
+            assertEquals(rightHandSide[row], leftHandSide, 1e-9);
+        }
+    }
+
+    @Test
+    void rejectsValuesOutsideTheThreeDiagonals() {
+        assertThrows(IllegalArgumentException.class, () -> new TridiagonalSystem(
+                new double[]{1, 2}, new double[]{3, 4},
+                new double[]{5, 0}, new double[]{6, 7}));
+        assertThrows(IllegalArgumentException.class, () -> new TridiagonalSystem(
+                new double[]{0, 2}, new double[]{3, 4},
+                new double[]{5, 1}, new double[]{6, 7}));
     }
 
     private static Stream<Arguments> systems() {

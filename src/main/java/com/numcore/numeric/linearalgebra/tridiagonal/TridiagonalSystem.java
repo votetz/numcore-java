@@ -16,6 +16,9 @@ public record TridiagonalSystem(double[] lowerDiagonal, double[] mainDiagonal,
                 || rightHandSide.length != size) {
             throw new IllegalArgumentException("All system arrays must have the same size");
         }
+        if (lowerDiagonal[0] != 0 || upperDiagonal[size - 1] != 0) {
+            throw new IllegalArgumentException("Values outside the three diagonals must be zero");
+        }
     }
 
     @Override
