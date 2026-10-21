@@ -36,6 +36,33 @@ class MatrixAndVectorFileReaderTest {
         }
     }
 
+    @org.junit.jupiter.api.Test
+    void readsVariantSevenMatrixAndRightHandSideFromResources() throws IOException {
+        Path matrixFile = Path.of("src/test/resources/matrix.txt");
+        Path vectorFile = Path.of("src/test/resources/vector.txt");
+
+        Matrix matrix = new RectangleArrayMatrixFileReader().read(matrixFile);
+        Vector vector = new ArrayVectorFileReader().read(vectorFile);
+
+        double[][] expectedMatrix = {
+                {22.5575, 39.3926, 3.5581, 28.0089},
+                {-30.2615, 29.7423, 34.8813, 12.8698},
+                {11.6921, -24.9337, 28.8091, 21.3882},
+                {-41.8493, 35.5320, -19.2518, -2.7015}
+        };
+        double[] expectedVector = {-30.8114, 49.4996, 14.7635, -32.5864};
+
+        assertEquals(4, matrix.rows());
+        assertEquals(4, matrix.cols());
+        assertEquals(expectedVector.length, vector.size());
+        for (int row = 0; row < expectedMatrix.length; row++) {
+            for (int column = 0; column < expectedMatrix[row].length; column++) {
+                assertEquals(expectedMatrix[row][column], matrix.get(row, column));
+            }
+            assertEquals(expectedVector[row], vector.get(row));
+        }
+    }
+
     @ParameterizedTest
     @MethodSource("invalidMatrixFiles")
     void rejectsInvalidMatrix(String content, Class<? extends Throwable> exceptionType) throws IOException {
@@ -76,7 +103,9 @@ class MatrixAndVectorFileReaderTest {
 
     private static Stream<Arguments> matrixFiles() {
         return Stream.of(
-                Arguments.of("1.0 2.0 3.0\n4.0 5.0 6.0\n", new double[][]{{1, 2, 3}, {4, 5, 6}}),
+                Arguments.of("22,5575 39,3926 3,5581 28,0089\n-30,2615 29,7423 34,8813 12,8698",
+                        new double[][]{{22.5575, 39.3926, 3.5581, 28.0089},
+                                {-30.2615, 29.7423, 34.8813, 12.8698}}),
                 Arguments.of("  -1\t2.5  \n\n  3e2 4  \n", new double[][]{{-1, 2.5}, {300, 4}})
         );
     }
@@ -91,7 +120,8 @@ class MatrixAndVectorFileReaderTest {
 
     private static Stream<Arguments> vectorFiles() {
         return Stream.of(
-                Arguments.of("1.0\n2.0\n3.0\n", new double[]{1, 2, 3}),
+                Arguments.of("-30,8114\n49,4996\n14,7635\n-32,5864\n",
+                        new double[]{-30.8114, 49.4996, 14.7635, -32.5864}),
                 Arguments.of("  -1.5  2\t3e1\n\n4\n", new double[]{-1.5, 2, 30, 4})
         );
     }

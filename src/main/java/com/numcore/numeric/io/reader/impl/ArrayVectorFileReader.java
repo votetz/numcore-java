@@ -16,8 +16,9 @@ public class ArrayVectorFileReader implements VectorFileReader {
         double[] data;
         try (Stream<String> lines = Files.lines(path)) {
             data = lines.filter(line -> !line.isBlank())
-                    .flatMap(line -> Arrays.stream(line.trim().split("\\s+")))
-                    .mapToDouble(Double::parseDouble)
+                    .map(String::trim)
+                    .flatMap(line -> Arrays.stream(line.split("\\s+")))
+                    .mapToDouble(RectangleArrayMatrixFileReader::parseNumber)
                     .toArray();
         }
 

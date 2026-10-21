@@ -9,6 +9,7 @@ import com.numcore.numeric.linearalgebra.matrix.impl.RectangleArrayMatrix;
 import com.numcore.numeric.linearalgebra.vector.Vector;
 import com.numcore.numeric.linearalgebra.vector.impl.ArrayVector;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -22,6 +23,27 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class MatrixAndVectorFileWriterTest {
     @TempDir
     Path tempDir;
+
+    @Test
+    void readsAndWritesVariantSevenMatrixAndRightHandSide() throws IOException {
+        Path matrixFile = Path.of("src/test/resources/matrix.txt");
+        Path vectorFile = Path.of("src/test/resources/vector.txt");
+        Matrix expectedMatrix = new RectangleArrayMatrixFileReader().read(matrixFile);
+        Vector expectedVector = new ArrayVectorFileReader().read(vectorFile);
+
+        Path writtenMatrixFile = tempDir.resolve("variant-seven-matrix.txt");
+        Path writtenVectorFile = tempDir.resolve("variant-seven-vector.txt");
+        new RectangleArrayMatrixFileWriter().write(expectedMatrix, writtenMatrixFile);
+        new ArrayVectorFileWriter().write(expectedVector, writtenVectorFile);
+
+        assertMatrixEquals(expectedMatrix,
+                new RectangleArrayMatrixFileReader().read(writtenMatrixFile));
+        Vector actualVector = new ArrayVectorFileReader().read(writtenVectorFile);
+        assertEquals(expectedVector.size(), actualVector.size());
+        for (int i = 0; i < expectedVector.size(); i++) {
+            assertEquals(expectedVector.get(i), actualVector.get(i));
+        }
+    }
 
     @ParameterizedTest
     @MethodSource("matrices")

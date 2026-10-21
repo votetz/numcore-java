@@ -11,6 +11,9 @@ import java.util.stream.IntStream;
 public class ArrayVectorFileWriter implements VectorFileWriter {
     @Override
     public void write(Vector vector, Path path) throws IOException {
+        if (vector.size() == 0) {
+            throw new IllegalArgumentException("Vector must not be empty");
+        }
         var lines = IntStream.range(0, vector.size())
                 .mapToObj(index -> Double.toString(vector.get(index)))
                 .toList();
